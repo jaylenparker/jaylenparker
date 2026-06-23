@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CompTIA A+ Core 1 Quiz</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            background-color: #f5f0e8;
+            color: #1a1a1a;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        .container { max-width: 750px; width: 100%; }
+
+        h1 {
+            text-align: center;
+            font-size: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #888;
+            font-style: italic;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background-color: #ede8dc;
+            border: 1px solid #c9b99a;
+            padding: 36px;
+            margin-bottom: 20px;
+        }
+
+        .mode-title {
+            text-align: center;
+            font-size: 1.4rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+        }
+
+        .mode-subtitle {
+            text-align: center;
+            color: #888;
+            font-style: italic;
+            margin-bottom: 32px;
+        }
+
+        .progress-bar-container {
+            background-color: #c9b99a;
+            height: 8px;
+            margin-bottom: 24px;
+            border-radius: 4px;
+        }
+
+        .progress-bar {
+            background-color: #1a1a1a;
+            height: 8px;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .question-count {
+            font-size: 0.85rem;
+            color: #888;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .question-text {
+            font-size: 1.15rem;
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
+
+        .options { display: flex; flex-direction: column; gap: 12px; }
+
+        .option-btn {
+            background-color: #f5f0e8;
+            border: 1px solid #c9b99a;
+            padding: 14px 18px;
+            text-align: left;
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .option-btn:hover { background-color: #ddd8cc; }
+        .option-btn.correct { background-color: #c8e6c9; border-color: #4caf50; }
+        .option-btn.wrong { background-color: #ffcdd2; border-color: #f44336; }
+        .option-btn:disabled { cursor: default; }
+
+        .feedback {
+            margin-top: 20px;
+            font-size: 1rem;
+            font-weight: bold;
+            min-height: 24px;
+        }
+
+        .feedback.correct { color: #2e7d32; }
+        .feedback.wrong { color: #c62828; }
+
+        .next-btn {
+            margin-top: 24px;
+            background-color: #1a1a1a;
+            color: #f5f0e8;
+            border: none;
+            padding: 14px 32px;
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 1rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            display: none;
+        }
+
+        .next-btn:hover { background-color: #333; }
+
+        .results { text-align: center; }
+
+        .results h2 {
+            font-size: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 16px;
+        }
+
+        .score-display {
+            font-size: 3rem;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        .score-message {
+            font-size: 1.1rem;
+            font-style: italic;
+            color: #555;
+            margin-bottom: 32px;
+        }
+
+        .btn-row {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .restart-btn {
+            background-color: #1a1a1a;
+            color: #f5f0e8;
+            border: none;
+            padding: 14px 32px;
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 1rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .restart-btn:hover { background-color: #333; }
+
+        nav { text-align: center; margin-bottom: 32px; }
+
+        nav a {
+            color: #1a1a1a;
+            text-decoration: none;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 1px solid #1a1a1a;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <nav><a href="index.html">← Back to Portfolio</a></nav>
+
+    <h1>CompTIA A+ Quiz</h1>
+    <p class="subtitle">Core 1 Study Tool</p>
+
+    <!-- MODE SELECTOR -->
+    <div class="card" id="mode-card">
+        <p class="mode-title">Select a Mode</p>
+        <p class="mode-subtitle">Choose how you want to study today</p>
+        <div class="options">
+            <button class="option-btn" onclick="startQuiz(20)"><strong>Quick Mode</strong> — 20 random questions. Fast study session.</button>
+            <button class="option-btn" onclick="startQuiz(45)"><strong>Practice Mode</strong> — 45 questions. Covers all topics.</button>
+            <button class="option-btn" onclick="startQuiz(90)"><strong>Full Exam Mode</strong> — All 90 questions. Simulates the real test.</button>
+        </div>
+    </div>
+
+    <!-- QUIZ -->
+    <div class="card" id="quiz-card" style="display:none;">
+        <div class="progress-bar-container">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        <div class="question-count" id="question-count"></div>
+        <div class="question-text" id="question-text"></div>
+        <div class="options" id="options"></div>
+        <div class="feedback" id="feedback"></div>
+        <button class="next-btn" id="next-btn">Next Question →</button>
+    </div>
+
+    <!-- RESULTS -->
+    <div class="card" id="results" style="display:none;">
+        <div class="results">
+            <h2>Quiz Complete</h2>
+            <div class="score-display" id="score-display"></div>
+            <div class="score-message" id="score-message"></div>
+            <div class="btn-row">
+                <button class="restart-btn" onclick="retake()">Retake Same Mode</button>
+                <button class="restart-btn" onclick="goHome()">Choose New Mode</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const questions = [
+        { question: "Which connector type is commonly used for charging modern Android devices?", options: ["A. Micro-USB", "B. USB-C", "C. Lightning", "D. Mini-USB"], answer: "B" },
+        { question: "What type of screen technology is known for deep blacks and high contrast ratios?", options: ["A. LCD", "B. LED", "C. OLED", "D. TFT"], answer: "C" },
+        { question: "Which mobile feature allows two devices to communicate by touching them together?", options: ["A. Bluetooth", "B. NFC", "C. Wi-Fi Direct", "D. IR"], answer: "B" },
+        { question: "What is the purpose of MDM software?", options: ["A. Manage desktop monitors", "B. Control mobile devices remotely", "C. Monitor disk memory", "D. Manage domain machines"], answer: "B" },
+        { question: "Which of the following is Apple's proprietary charging connector?", options: ["A. USB-C", "B. Micro-USB", "C. Lightning", "D. Thunderbolt"], answer: "C" },
+        { question: "What does GPS stand for?", options: ["A. Global Positioning System", "B. General Packet Service", "C. Geographic Positioning Software", "D. Global Processing System"], answer: "A" },
+        { question: "Which wireless technology is typically used for mobile payments?", options: ["A. Bluetooth", "B. Wi-Fi", "C. NFC", "D. LTE"], answer: "C" },
+        { question: "What type of mobile device storage cannot be expanded?", options: ["A. microSD", "B. SD card", "C. Internal flash storage", "D. USB storage"], answer: "C" },
+        { question: "Which of the following best describes a mobile hotspot?", options: ["A. A Wi-Fi router for home use", "B. A device that shares cellular data as Wi-Fi", "C. A Bluetooth speaker", "D. A portable battery"], answer: "B" },
+        { question: "What is the function of a digitizer on a mobile device?", options: ["A. Converts analog signals to digital", "B. Detects touch input on the screen", "C. Controls screen brightness", "D. Manages battery charging"], answer: "B" },
+        { question: "Which port does HTTP use by default?", options: ["A. 443", "B. 21", "C. 80", "D. 25"], answer: "C" },
+        { question: "Which port does HTTPS use?", options: ["A. 80", "B. 443", "C. 22", "D. 3389"], answer: "B" },
+        { question: "What does DNS stand for?", options: ["A. Digital Network System", "B. Domain Name System", "C. Dynamic Network Service", "D. Data Name Server"], answer: "B" },
+        { question: "Which protocol automatically assigns IP addresses to devices?", options: ["A. DNS", "B. FTP", "C. DHCP", "D. SMTP"], answer: "C" },
+        { question: "What is the default port for SSH?", options: ["A. 23", "B. 21", "C. 22", "D. 25"], answer: "C" },
+        { question: "Which of the following is a private IP address?", options: ["A. 8.8.8.8", "B. 192.168.1.1", "C. 172.32.0.1", "D. 100.0.0.1"], answer: "B" },
+        { question: "What device connects multiple networks together and routes traffic between them?", options: ["A. Switch", "B. Hub", "C. Router", "D. Repeater"], answer: "C" },
+        { question: "Which wireless standard operates on both 2.4GHz and 5GHz bands?", options: ["A. 802.11a", "B. 802.11b", "C. 802.11g", "D. 802.11n"], answer: "D" },
+        { question: "What does SSID stand for?", options: ["A. Secure System ID", "B. Service Set Identifier", "C. Subnet System ID", "D. Signal Strength Indicator"], answer: "B" },
+        { question: "Which cable type is immune to electromagnetic interference?", options: ["A. UTP", "B. STP", "C. Coaxial", "D. Fiber optic"], answer: "D" },
+        { question: "What is the maximum length of a Cat5e Ethernet cable run?", options: ["A. 50 meters", "B. 100 meters", "C. 150 meters", "D. 200 meters"], answer: "B" },
+        { question: "Which protocol is used to send email?", options: ["A. IMAP", "B. POP3", "C. SMTP", "D. FTP"], answer: "C" },
+        { question: "What type of address is FF:FF:FF:FF:FF:FF?", options: ["A. Unicast", "B. Multicast", "C. Broadcast", "D. Loopback"], answer: "C" },
+        { question: "Which port does RDP use?", options: ["A. 22", "B. 23", "C. 3389", "D. 8080"], answer: "C" },
+        { question: "What is the loopback IP address?", options: ["A. 192.168.0.1", "B. 10.0.0.1", "C. 127.0.0.1", "D. 172.16.0.1"], answer: "C" },
+        { question: "What does CPU stand for?", options: ["A. Central Processing Unit", "B. Computer Personal Unit", "C. Central Peripheral Unit", "D. Core Processing Utility"], answer: "A" },
+        { question: "What type of connector does a standard power supply use to connect to a motherboard?", options: ["A. 4-pin Molex", "B. 24-pin ATX", "C. SATA", "D. PCIe"], answer: "B" },
+        { question: "Which of the following is a non-volatile storage device?", options: ["A. RAM", "B. Cache", "C. SSD", "D. Virtual Memory"], answer: "C" },
+        { question: "What does BIOS stand for?", options: ["A. Basic Input Output System", "B. Binary Integrated Operating System", "C. Base Input Output Software", "D. Basic Integrated Output System"], answer: "A" },
+        { question: "Which RAM type is currently most common in modern desktop computers?", options: ["A. DDR2", "B. DDR3", "C. DDR4", "D. SDRAM"], answer: "C" },
+        { question: "What is the function of a heatsink?", options: ["A. Store data temporarily", "B. Dissipate heat from the CPU", "C. Supply power to components", "D. Connect peripherals"], answer: "B" },
+        { question: "Which storage interface is fastest?", options: ["A. SATA II", "B. SATA III", "C. NVMe", "D. IDE"], answer: "C" },
+        { question: "What does GPU stand for?", options: ["A. General Processing Unit", "B. Graphics Processing Unit", "C. Global Processing Utility", "D. Graphics Peripheral Unit"], answer: "B" },
+        { question: "Which form factor is the most common for desktop motherboards?", options: ["A. Mini-ITX", "B. Micro-ATX", "C. ATX", "D. E-ATX"], answer: "C" },
+        { question: "What is the purpose of thermal paste?", options: ["A. Lubricates fans", "B. Improves heat transfer between CPU and heatsink", "C. Protects motherboard from dust", "D. Seals the case"], answer: "B" },
+        { question: "Which of the following is used to measure power supply output?", options: ["A. Volts", "B. Watts", "C. Amps", "D. Ohms"], answer: "B" },
+        { question: "What type of memory is used as CPU cache?", options: ["A. DRAM", "B. SRAM", "C. Flash", "D. ROM"], answer: "B" },
+        { question: "Which connector is used to power SATA drives?", options: ["A. Molex", "B. Berg", "C. SATA power", "D. PCIe"], answer: "C" },
+        { question: "What does ECC RAM stand for?", options: ["A. Extended Cache Control", "B. Error Correcting Code", "C. Enhanced CPU Cache", "D. External Cache Controller"], answer: "B" },
+        { question: "Which slot is used to install a dedicated graphics card?", options: ["A. PCI", "B. PCIe x1", "C. PCIe x16", "D. AGP"], answer: "C" },
+        { question: "What is the purpose of a UPS in an IT environment?", options: ["A. Speed up internet connection", "B. Provide backup power during outages", "C. Cool down servers", "D. Manage network traffic"], answer: "B" },
+        { question: "Which of the following ports transmits both video and audio?", options: ["A. VGA", "B. DVI-D", "C. HDMI", "D. DisplayPort only"], answer: "C" },
+        { question: "What does RAID 1 do?", options: ["A. Stripes data across drives for speed", "B. Mirrors data across two drives", "C. Combines striping and parity", "D. Uses a single drive"], answer: "B" },
+        { question: "Which of the following is an input device?", options: ["A. Monitor", "B. Printer", "C. Scanner", "D. Speaker"], answer: "C" },
+        { question: "What is a hypervisor?", options: ["A. A type of firewall", "B. Software that creates and manages virtual machines", "C. A cloud storage service", "D. A network monitoring tool"], answer: "B" },
+        { question: "Which of the following is a Type 1 hypervisor?", options: ["A. VirtualBox", "B. VMware Workstation", "C. VMware ESXi", "D. UTM"], answer: "C" },
+        { question: "What does IaaS stand for?", options: ["A. Internet as a Service", "B. Infrastructure as a Service", "C. Integration as a Service", "D. Information as a Service"], answer: "B" },
+        { question: "What does SaaS stand for?", options: ["A. Storage as a Service", "B. Security as a Service", "C. Software as a Service", "D. System as a Service"], answer: "C" },
+        { question: "Which cloud model is exclusively used by one organization?", options: ["A. Public cloud", "B. Hybrid cloud", "C. Community cloud", "D. Private cloud"], answer: "D" },
+        { question: "What is a sandbox in computing?", options: ["A. A type of storage device", "B. An isolated environment for testing software", "C. A network segment", "D. A backup system"], answer: "B" },
+        { question: "What does PaaS stand for?", options: ["A. Platform as a Service", "B. Privacy as a Service", "C. Protocol as a Service", "D. Processing as a Service"], answer: "A" },
+        { question: "Which of the following is an advantage of cloud computing?", options: ["A. Always requires on-site hardware", "B. Scalability on demand", "C. No internet connection needed", "D. Fixed storage capacity"], answer: "B" },
+        { question: "What is a virtual machine?", options: ["A. A physical computer", "B. A software-based emulation of a computer", "C. A type of network switch", "D. A cloud storage bucket"], answer: "B" },
+        { question: "Which of the following best describes a community cloud?", options: ["A. Open to the general public", "B. Shared by several organizations with common interests", "C. Owned by one company", "D. A mix of public and private cloud"], answer: "B" },
+        { question: "A computer powers on but displays nothing on the monitor. What should you check first?", options: ["A. Hard drive", "B. Monitor connection and power", "C. RAM", "D. CPU"], answer: "B" },
+        { question: "Which command tests connectivity between two network devices?", options: ["A. ipconfig", "B. tracert", "C. ping", "D. netstat"], answer: "C" },
+        { question: "What does a POST test check?", options: ["A. Network connectivity", "B. Hardware components during startup", "C. Software installations", "D. User account settings"], answer: "B" },
+        { question: "A user reports their computer is running slowly. What is the first thing you should check?", options: ["A. Network speed", "B. CPU and RAM usage", "C. Monitor resolution", "D. Keyboard settings"], answer: "B" },
+        { question: "Which tool is used to test a network cable?", options: ["A. Multimeter", "B. Cable tester", "C. Loopback plug", "D. Toner probe"], answer: "B" },
+        { question: "What does the ipconfig command display?", options: ["A. Running processes", "B. Network configuration details", "C. Disk usage", "D. User accounts"], answer: "B" },
+        { question: "A printer is printing blank pages. What is the most likely cause?", options: ["A. Paper jam", "B. Empty or faulty ink/toner cartridge", "C. Driver issue", "D. Network problem"], answer: "B" },
+        { question: "Which command shows the path packets take to a destination?", options: ["A. ping", "B. ipconfig", "C. tracert", "D. netstat"], answer: "C" },
+        { question: "What is the first step in the CompTIA troubleshooting methodology?", options: ["A. Establish a theory", "B. Identify the problem", "C. Test the theory", "D. Implement the solution"], answer: "B" },
+        { question: "A device receives a 169.254.x.x IP address. What does this indicate?", options: ["A. The device has a static IP", "B. DHCP server could not be reached", "C. The device is connected to the internet", "D. DNS is not working"], answer: "B" },
+        { question: "Which tool is used to crimp RJ-45 connectors onto network cables?", options: ["A. Punchdown tool", "B. Cable stripper", "C. Crimping tool", "D. Loopback plug"], answer: "C" },
+        { question: "What should you do before working inside a computer to prevent static damage?", options: ["A. Turn on the computer", "B. Wear an anti-static wrist strap", "C. Remove the RAM", "D. Unplug the monitor"], answer: "B" },
+        { question: "A user cannot connect to the internet but can ping 127.0.0.1. What does this mean?", options: ["A. The NIC is faulty", "B. TCP/IP stack is working but the issue is external", "C. The monitor is broken", "D. DNS is working"], answer: "B" },
+        { question: "Which of the following would cause a computer to overheat?", options: ["A. Too much RAM", "B. Clogged fans and vents", "C. A fast CPU", "D. Multiple monitors"], answer: "B" },
+        { question: "What is the purpose of a loopback plug?", options: ["A. Extend cable length", "B. Test a network port by sending and receiving signals", "C. Connect two switches", "D. Block network traffic"], answer: "B" },
+        { question: "A computer beeps multiple times on startup but does not boot. What does this indicate?", options: ["A. Software error", "B. POST failure — hardware issue detected", "C. Virus infection", "D. Monitor failure"], answer: "B" },
+        { question: "Which command releases and renews an IP address on Windows?", options: ["A. ipconfig /all", "B. ipconfig /release and ipconfig /renew", "C. ping /renew", "D. netstat /release"], answer: "B" },
+        { question: "What is the most common cause of a paper jam in a printer?", options: ["A. Wrong driver installed", "B. Worn or dirty feed rollers", "C. Low ink", "D. Network issue"], answer: "B" },
+        { question: "Which tool is used to trace a cable through walls?", options: ["A. Cable tester", "B. Multimeter", "C. Toner probe", "D. Crimping tool"], answer: "C" },
+        { question: "A monitor displays a distorted image. What is the most likely cause?", options: ["A. RAM failure", "B. Loose or damaged video cable", "C. Hard drive failure", "D. CPU overheating"], answer: "B" },
+        { question: "What does VLAN stand for?", options: ["A. Virtual Local Area Network", "B. Variable LAN", "C. Virtual Link Access Node", "D. Verified LAN"], answer: "A" },
+        { question: "Which of the following is a Class C IP address?", options: ["A. 10.0.0.1", "B. 172.16.0.1", "C. 192.168.1.1", "D. 127.0.0.1"], answer: "C" },
+        { question: "What is the purpose of a subnet mask?", options: ["A. Encrypt network traffic", "B. Identify the network and host portions of an IP address", "C. Assign IP addresses automatically", "D. Block unauthorized access"], answer: "B" },
+        { question: "Which protocol secures wireless networks using the strongest encryption?", options: ["A. WEP", "B. WPA", "C. WPA2", "D. WPA3"], answer: "D" },
+        { question: "What is a MAC address?", options: ["A. A software-assigned address", "B. A hardware address burned into a NIC", "C. A type of IP address", "D. A wireless network name"], answer: "B" },
+        { question: "Which device operates at Layer 2 of the OSI model?", options: ["A. Router", "B. Hub", "C. Switch", "D. Firewall"], answer: "C" },
+        { question: "What does NAT stand for?", options: ["A. Network Access Terminal", "B. Network Address Translation", "C. Node Access Table", "D. Network Authentication Token"], answer: "B" },
+        { question: "Which of the following is a fiber optic connector type?", options: ["A. RJ-45", "B. RJ-11", "C. LC", "D. BNC"], answer: "C" },
+        { question: "What is the maximum speed of 802.11ac Wi-Fi?", options: ["A. 54 Mbps", "B. 300 Mbps", "C. 600 Mbps", "D. Over 1 Gbps"], answer: "D" },
+        { question: "Which of the following best describes a VPN?", options: ["A. A type of wireless network", "B. An encrypted tunnel over the internet", "C. A physical network cable", "D. A type of firewall"], answer: "B" },
+        { question: "What is the maximum speed of USB 3.0?", options: ["A. 480 Mbps", "B. 5 Gbps", "C. 10 Gbps", "D. 1 Gbps"], answer: "B" },
+        { question: "Which of the following is used to protect a network from unauthorized access?", options: ["A. Switch", "B. Hub", "C. Firewall", "D. Repeater"], answer: "C" },
+        { question: "Which of the following is an example of two-factor authentication?", options: ["A. Username and password", "B. Password and PIN", "C. Password and fingerprint scan", "D. Username and security question"], answer: "C" },
+        { question: "What does RAID 0 do?", options: ["A. Mirrors data for redundancy", "B. Stripes data across drives for speed", "C. Combines mirroring and striping", "D. Uses parity for fault tolerance"], answer: "B" },
+        { question: "Which of the following connector types is used for telephone lines?", options: ["A. RJ-45", "B. RJ-11", "C. LC", "D. ST"], answer: "B" },
+    ];
+
+    let shuffled = [];
+    let current = 0;
+    let score = 0;
+    let selectedMode = 90;
+
+    function shuffle(arr) {
+        return arr.sort(() => Math.random() - 0.5);
+    }
+
+    function startQuiz(mode) {
+        selectedMode = mode;
+        shuffled = shuffle([...questions]).slice(0, mode);
+        current = 0;
+        score = 0;
+        document.getElementById("mode-card").style.display = "none";
+        document.getElementById("results").style.display = "none";
+        document.getElementById("quiz-card").style.display = "block";
+        loadQuestion();
+    }
+
+    function retake() {
+        startQuiz(selectedMode);
+    }
+
+    function goHome() {
+        document.getElementById("results").style.display = "none";
+        document.getElementById("quiz-card").style.display = "none";
+        document.getElementById("mode-card").style.display = "block";
+    }
+
+    function loadQuestion() {
+        const q = shuffled[current];
+        const total = shuffled.length;
+
+        document.getElementById("progress-bar").style.width = `${((current) / total) * 100}%`;
+        document.getElementById("question-count").textContent = `Question ${current + 1} of ${total}`;
+        document.getElementById("question-text").textContent = q.question;
+        document.getElementById("feedback").textContent = "";
+        document.getElementById("feedback").className = "feedback";
+        document.getElementById("next-btn").style.display = "none";
+
+        const optionsDiv = document.getElementById("options");
+        optionsDiv.innerHTML = "";
+
+        q.options.forEach(option => {
+            const btn = document.createElement("button");
+            btn.className = "option-btn";
+            btn.textContent = option;
+            btn.onclick = () => selectAnswer(option[0], btn);
+            optionsDiv.appendChild(btn);
+        });
+    }
+
+    function selectAnswer(selected, btn) {
+        const q = shuffled[current];
+        const allBtns = document.querySelectorAll(".option-btn");
+
+        allBtns.forEach(b => b.disabled = true);
+
+        if (selected === q.answer) {
+            btn.classList.add("correct");
+            document.getElementById("feedback").textContent = "✓ Correct!";
+            document.getElementById("feedback").className = "feedback correct";
+            score++;
+        } else {
+            btn.classList.add("wrong");
+            document.getElementById("feedback").textContent = `✗ Wrong! The correct answer was ${q.answer}.`;
+            document.getElementById("feedback").className = "feedback wrong";
+            allBtns.forEach(b => {
+                if (b.textContent.startsWith(q.answer)) b.classList.add("correct");
+            });
+        }
+
+        document.getElementById("next-btn").style.display = "block";
+    }
+
+    document.getElementById("next-btn").onclick = () => {
+        current++;
+        if (current < shuffled.length) {
+            loadQuestion();
+        } else {
+            showResults();
+        }
+    };
+
+    function showResults() {
+        document.getElementById("quiz-card").style.display = "none";
+        document.getElementById("results").style.display = "block";
+
+        const percentage = Math.round((score / shuffled.length) * 100);
+        document.getElementById("score-display").textContent = `${score}/${shuffled.length} — ${percentage}%`;
+
+        let message = "";
+        if (percentage >= 90) message = "Excellent! You're ready for the A+!";
+        else if (percentage >= 75) message = "Great job! Almost there, keep studying!";
+        else if (percentage >= 60) message = "Not bad, but keep practicing!";
+        else message = "Keep studying, you'll get there!";
+
+        document.getElementById("score-message").textContent = message;
+    }
+</script>
+
+</body>
+</html>
